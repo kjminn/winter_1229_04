@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -12,10 +14,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import bmi.vo.BMIVO;
+
 public class BMIView extends JFrame {
 	JTextField tfWeight, tfHeight;
-	double weigth, height, bmi;
-	JLabel lblIcon;
+	JLabel lblIcon, lblResult;
 	public BMIView() {
 		add(new PanelAbove(),"North");
 		add(new PanelBelow(),"Center");
@@ -38,6 +41,7 @@ public class BMIView extends JFrame {
 			JLabel lblkg = new JLabel("㎏");
 			JLabel lblcm = new JLabel("㎝");
 			JButton btnResult = new JButton("결과확인");
+			btnResult.addActionListener(btnL);
 			tfWeight = new JTextField(10);
 			tfHeight = new JTextField(10);
 			add(lblTitle, "North");
@@ -63,7 +67,7 @@ public class BMIView extends JFrame {
 		public PanelBelow() {
 			setBackground(new Color(255, 204, 229));
 			setLayout(new BorderLayout());
-			JLabel lblResult = new JLabel("<html>당신의 체중은 _㎏, 키는 _㎝이므로<br>bmi지수는 _㎏/㎡이며, __체중입니다.</html>", JLabel.CENTER);
+			lblResult = new JLabel("<html>당신의 체중은 _㎏, 키는 _㎝이므로<br>bmi지수는 _㎏/㎡이며, __체중입니다.</html>", JLabel.CENTER);
 			Font font = new Font("맑은 고딕", Font.BOLD, 20);
 			lblResult.setFont(font);
 			ImageIcon icon = new ImageIcon("images/bmi_original.jpg");
@@ -73,4 +77,47 @@ public class BMIView extends JFrame {
 		}
 	}
 	
+	ActionListener btnL = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+//			BMIVO 객체에 입력 받은 체중과 키를 설정하고 bmi를 설정한다.
+			BMIVO vo = new BMIVO();
+			double weight = Double.parseDouble(tfWeight.getText());
+			double height = Double.parseDouble(tfHeight.getText());
+			vo.setWeight(weight);
+			vo.setHeight(height);
+			vo.setBmi();
+			String bmiResult ="";
+			ImageIcon icon = null;
+			if(vo.getBmi() < 18.5) {
+				bmiResult = "저";
+				icon = new ImageIcon("images/under.jpg");
+			}else if(vo.getBmi() < 24.9) {
+				bmiResult = "정상";
+				icon = new ImageIcon("images/normal.jpg");
+			}else if(vo.getBmi() < 29.9) {
+				bmiResult = "과";
+				icon = new ImageIcon("images/over.jpg");
+			}else if(vo.getBmi() < 34.9) {
+				bmiResult = "비만";
+				icon = new ImageIcon("images/obese.jpg");
+			}else {
+				bmiResult = "고도비만";
+				icon = new ImageIcon("images/extremely.jpg");
+			}
+			
+			lblResult.setText("<html>당신의 체중은 "+vo.getWeight()+"㎏, 키는 "+vo.getHeight()+"㎝이므로"
+					+ "<br>bmi지수는 "+String.format("%.1f", vo.getBmi())+"㎏/㎡이며, "
+					+bmiResult+"체중입니다.</html>");
+			lblIcon.setIcon(icon);
+		}
+	};
+	
 }
+
+
+
+
+
+
