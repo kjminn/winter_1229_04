@@ -2,8 +2,10 @@ package bmi.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -12,7 +14,8 @@ import javax.swing.JTextField;
 
 public class BMIView extends JFrame {
 	JTextField tfWeight, tfHeight;
-	
+	double weigth, height, bmi;
+	JLabel lblIcon;
 	public BMIView() {
 		add(new PanelAbove(),"North");
 		add(new PanelBelow(),"Center");
@@ -28,13 +31,15 @@ public class BMIView extends JFrame {
 			setBackground(new Color(204, 204, 255));
 			setLayout(new BorderLayout());
 			JLabel lblTitle = new JLabel("체질량지수(BMI)", JLabel.CENTER); 
+			Font font = new Font("맑은 고딕", Font.BOLD, 25);
+			lblTitle.setFont(font);
 			JLabel lblWeight = new JLabel("체중: ");
 			JLabel lblHeight = new JLabel("신장: ");
 			JLabel lblkg = new JLabel("㎏");
 			JLabel lblcm = new JLabel("㎝");
 			JButton btnResult = new JButton("결과확인");
-			tfWeight = new JTextField(15);
-			tfHeight = new JTextField(15);
+			tfWeight = new JTextField(10);
+			tfHeight = new JTextField(10);
 			add(lblTitle, "North");
 			JPanel panCenter = new JPanel(new BorderLayout());
 			
@@ -57,6 +62,14 @@ public class BMIView extends JFrame {
 	class PanelBelow extends JPanel{
 		public PanelBelow() {
 			setBackground(new Color(255, 204, 229));
+			setLayout(new BorderLayout());
+			JLabel lblResult = new JLabel("<html>당신의 체중은 _㎏, 키는 _㎝이므로<br>bmi지수는 _㎏/㎡이며, __체중입니다.</html>", JLabel.CENTER);
+			Font font = new Font("맑은 고딕", Font.BOLD, 20);
+			lblResult.setFont(font);
+			ImageIcon icon = new ImageIcon("images/bmi_original.jpg");
+			lblIcon = new JLabel(icon, JLabel.CENTER);
+			add(lblResult, "North");
+			add(lblIcon, "Center");
 		}
 	}
 	
